@@ -1,18 +1,24 @@
 <template>
-  <div class="container mt-5">
-    <div class="row">
-      <div class="col form-inline">
-        <b-form-input
-          id="input-2"
-          v-model="newTask"
-          required
-          placeholder="Enter Task"
-          @keyup.enter="add"
-        ></b-form-input>
-        <!--<button @click="add" variant="primary" class="ml-3">Add</button>-->
-      </div>
-    </div>
-    <div class="row mt-5">
+  <div>
+    <RadioComponent
+      :id="task._id"
+      :isChecked="task.complete"
+      @change="onCompleteChange"
+    />
+    <label :for="task._id">
+    {{task.text}} {{task.author ? `(${task.author.username})` : ''}}
+    </label>
+    <ButtonComponent 
+      @click="onDeleteTask"
+      :buttonText="'X'"
+    />
+    <ButtonComponent
+      @click="showDetails"
+      :buttonText="'show details'"
+    />
+
+    <div v-if="value1">
+             <div class="row mt-5">
       <div class="col-3">
         <div class="p-2 alert alert-secondary">
           <h3>Back Log</h3>
@@ -124,38 +130,49 @@
           </draggable>
         </div>
       </div>
+     </div>
     </div>
-  </div>
+   </div>
+
 </template>
 
 <script>
-//import draggable
+import {Meteor} from 'meteor/meteor'
+import RadioComponent from './common/RadioComponent.vue'
+import ButtonComponent from './common/ButtonComponent.vue'
 import draggable from "vuedraggable";
 
 export default {
-  name: "kanban-board",
   components: {
-    //import draggable as a component
+    RadioComponent,
+    ButtonComponent,
     draggable
+  },
+  props: {
+    task: {
+      type: null,
+      required: true,
+    }
   },
   data() {
     return {
       // for new tasks
+      value1: false,
       newTask: "",
       // 4 arrays to keep track of our 4 statuses
-      arrBackLog: [
-        //{ name: "Code Sign Up Page" },
-        //{ name: "Test Dashboard" },
-        //{ name: "Style Registration" },
-        //{ name: "Help with Designs" }
-      ],
+      arrBackLog: [],
       arrInProgress: [],
       arrTested: [],
       arrDone: []
     };
   },
   methods: {
-    //add new tasks method
+    onCompleteChange(complete) {
+      Meteor.call('tasks.setIsChecked', this.task._id, complete)
+    },
+    onDeleteTask() {
+      Meteor.call('tasks.remove', this.task._id)
+    },
     add: function(choice) {
       if (this.newTask) 
       {
@@ -181,17 +198,23 @@ export default {
         }
         
       }
+    },
+    showDetails: function()
+    {
+      if (this.value1 == false)
+      {
+        this.value1 = true;
+        console.log(this.value1);
+      }
+      else if (this.value1 == true)
+      {
+        this.value1 = false;
+        console.log(this.value1);
+      }
     }
   }
-};
-</script>
-
-<style>
-/* light stylings for the kanban columns */
-.kanban-column {
-  min-height: 300px;
 }
-</style>
+</script>
 
 <style>
 /* light stylings for the kanban columns */
@@ -201,9 +224,8 @@ export default {
   background-color:blanchedalmond;
 }
 
-.list-group-item
-{
-  background-color:pink;
-}
-
 </style>
+
+
+
+
