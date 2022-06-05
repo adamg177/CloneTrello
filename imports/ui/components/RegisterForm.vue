@@ -1,9 +1,7 @@
 <template>
   <center>
   <div class="register">
-  
-   
-    
+
       <div class="content content-boxed overflow-hidden">
         <div class="row">
           <div
@@ -94,6 +92,7 @@
                       Create Account
                     </button>
                   </div>
+                  <p class="mt-5 mb-3 text-muted">@Create for Student Project</p>
                 </div>
               </form>
               <!-- END Register Form -->
@@ -132,7 +131,7 @@ export default {
         },
         error => {
           if (error) {
-            console.log("Error", error.reason);
+            alert("Error", error.reason);
           } else {
             this.$router.push({ name: "personal" });
           }

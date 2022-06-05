@@ -30,7 +30,9 @@
         @click="toggleHideComplete"
       />
     </template>
+    
     <template v-else>
+      
       <center>
         <h1>Login</h1>
       <LoginForm/>
@@ -120,7 +122,7 @@ export default {
 
 .form-control {
     display: block;
-    width: 100%;
+    width: 80%;
     padding: 0.375rem 0.75rem;
     font-size: 1rem;
     font-weight: 400;
@@ -157,7 +159,8 @@ export default {
 }
 
 .authors{
-  position: fixed; bottom: 0px; left: 0px ;z-index: 10;
+  position: fixed; bottom: 0px; left: 0px ;z-index: 10;  text-align: justify;
+  text-justify: inter-word;font-size: medium;
 }
 
 
