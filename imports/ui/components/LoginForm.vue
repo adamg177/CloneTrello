@@ -7,6 +7,7 @@
       <input
         required
         v-model="user.username"
+        placeholder="Username"
       />
       <br>
       <br>
@@ -14,6 +15,7 @@
         required
         type="password"
         v-model="user.password"
+        placeholder="Password"
       />
       <br>
       <br>
@@ -21,6 +23,11 @@
         :buttonText="'Login'"
         @click="onLoginSubmit"
       />
+
+        <p class="authors"><strong>Authors Project:</strong><br>Karolina Maciejewska 
+        <a href="https://github.com/Karo0510">Karolina Github</a> <br>Maciej Morawski 
+        <a href="https://github.com/MacMarMor">Maciej Github</a><br>Adam Grzesiak 
+        <a href="https://github.com/adamg177">Adam Github</a></p>
     </form>
   </div>
 </template>
@@ -43,7 +50,7 @@ export default {
   },
   computed: {
     u() {
-      return Meteor.user()
+      return Meteor.user() 
     }
   },
   methods: {
@@ -106,9 +113,7 @@ export default {
   border-top-right-radius: 0;
 }
 
-.authors{
-  position: fixed; bottom: 0px; left: 0px ;z-index: 10;
-}
+
 .form-control {
     display: block;
     width: 100%;
@@ -126,5 +131,7 @@ export default {
     border-radius: 0.375rem;
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
-
+.obraz{
+  background-color: #cccccc;
+}
 </style>
