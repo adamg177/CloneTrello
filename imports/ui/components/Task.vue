@@ -18,7 +18,7 @@
     />
 
     <div v-if="value1">
-             <div class="row mt-5">
+    <div class="row-mt-5">
       <div class="col-3">
         <div class="p-2 alert alert-secondary">
           <h3>Back Log</h3>
@@ -29,6 +29,7 @@
           placeholder="BackLog"
           @keyup.enter="add"
         >
+         
           <button @click="add(1)" variant="primary" class="ml-3">Add</button>
           <!-- Backlog draggable component. Pass arrBackLog to list prop -->
           <draggable
@@ -140,7 +141,7 @@
 import {Meteor} from 'meteor/meteor'
 import RadioComponent from './common/RadioComponent.vue'
 import ButtonComponent from './common/ButtonComponent.vue'
-import draggable from "vuedraggable";
+import draggable from "vuedraggable"
 
 export default {
   components: {
@@ -174,26 +175,32 @@ export default {
       Meteor.call('tasks.remove', this.task._id)
     },
     add: function(choice) {
+
       if (this.newTask) 
       {
         if (choice == 1)
         {
             this.arrBackLog.push({ name: this.newTask });
+            console.log(this.arrBackLog[0].name)
+            Meteor.call('tasks.update', this.task.text, this.task._id, this.arrBackLog, this.arrInProgress, this.arrTested, this.arrDone);
             this.newTask = "";
         }
         else if (choice == 2)
         {
           this.arrInProgress.push({ name: this.newTask });
+          Meteor.call('tasks.update', this.task.text, this.task._id, this.arrBackLog, this.arrInProgress, this.arrTested, this.arrDone);
           this.newTask = "";
         }
         else if (choice == 3)
         {
           this.arrTested.push({ name: this.newTask });
+          Meteor.call('tasks.update', this.task.text, this.task._id, this.arrBackLog, this.arrInProgress, this.arrTested, this.arrDone);
           this.newTask = "";
         }
         else if (choice == 4)
         {
           this.arrDone.push({ name: this.newTask });
+          Meteor.call('tasks.update', this.task.text, this.task._id, this.arrBackLog, this.arrInProgress, this.arrTested, this.arrDone);
           this.newTask = "";
         }
         
@@ -222,6 +229,11 @@ export default {
   min-height: 100px;
   min-width: 100px;
   background-color:blanchedalmond;
+}
+
+.list-group-item
+{
+    background-color: pink
 }
 
 </style>
