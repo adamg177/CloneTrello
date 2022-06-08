@@ -184,7 +184,8 @@ export default {
     async spr()
     {
       const result = await this.init();   
-      console.log("result="+result);   
+      console.log("result="+result); 
+      this.arrBackLog = [];  
       Array.prototype.push.apply(this.arrBackLog, result);
       //Array.prototype.push(this.arrBackLog, result);
       console.log("arrBackLog: "+this.arrBackLog);
@@ -228,6 +229,7 @@ export default {
     },
     showDetails: function()
     {
+      //this.spr();
       if (this.value1 == false)
       {
         this.spr();
@@ -242,6 +244,7 @@ export default {
         Meteor.call('tasks.update', this.task.text, this.task._id, this.arrBackLog, this.arrInProgress, this.arrTested, this.arrDone);
         this.value1 = false;
         console.log(this.value1);
+        //this.arrBackLog = [];
       }
     },
     saveData: function()
