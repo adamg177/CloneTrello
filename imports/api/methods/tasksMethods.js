@@ -62,8 +62,6 @@ Meteor.methods({
       throw new Meteor.Error('Not authorized')
     }
 
-    console.log(arrBackLog)
-
     var newvalues = { $set: {
       BackLog: arrBackLog, 
       InProgress: arrInProgress,
@@ -73,8 +71,58 @@ Meteor.methods({
 
     TasksCollection.update({text: text, _id: id}, newvalues)
 
+  },
 
-    console.log(TasksCollection.find({text: text, _id: id}))
+  'tasks.readArrBackLog'(text, id)
+  {
+    check(text, String)
+    if (!id) {
+      throw new Meteor.Error('Not authorized')
+    }
+
+    query = {text: text, _id: id} ;
+  
+    //console.log(TasksCollection.find(query).fetch()[0].BackLog)
+    return TasksCollection.find(query).fetch()[0].BackLog
+  },
+
+  'tasks.readArrInProgress'(text, id)
+  {
+    check(text, String)
+    if (!id) {
+      throw new Meteor.Error('Not authorized')
+    }
+
+    query = {text: text, _id: id} ;
+    
+    tab = TasksCollection.find(query).fetch()[0].InProgress
+    return tab
+  },
+
+  'tasks.readArrTesting'(text, id)
+  {
+    check(text, String)
+    if (!id) {
+      throw new Meteor.Error('Not authorized')
+    }
+
+    query = {text: text, _id: id} ;
+    
+    tab = TasksCollection.find(query).fetch()[0].Testing
+    return tab
+  },
+
+  'tasks.readArrDone'(text, id)
+  {
+    check(text, String)
+    if (!id) {
+      throw new Meteor.Error('Not authorized')
+    }
+
+    query = {text: text, _id: id} ;
+    
+    tab = TasksCollection.find(query).fetch()[0].Done
+    return tab
   }
 
 })

@@ -168,6 +168,142 @@ export default {
     };
   },
   methods: {
+    initBackLog()
+    {
+         return new Promise((resolve, reject)=>
+          {
+            Meteor.call('tasks.readArrBackLog', this.task.text, this.task._id, function (error, result)
+            {
+              if (error) reject(error);
+              resolve(result);
+            } );
+          }
+      );
+    },
+
+    initInProgress()
+    {
+         return new Promise((resolve, reject)=>
+          {
+            Meteor.call('tasks.readArrInProgress', this.task.text, this.task._id, function (error, result)
+            {
+              if (error) reject(error);
+              resolve(result);
+            } );
+          }
+      );
+    },
+
+    initInTesting()
+    {
+         return new Promise((resolve, reject)=>
+          {
+            Meteor.call('tasks.readArrTesting', this.task.text, this.task._id, function (error, result)
+            {
+              if (error) reject(error);
+              resolve(result);
+            } );
+          }
+      );
+    },
+
+    initDone()
+    {
+         return new Promise((resolve, reject)=>
+          {
+            Meteor.call('tasks.readArrDone', this.task.text, this.task._id, function (error, result)
+            {
+              if (error) reject(error);
+              resolve(result);
+            } );
+          }
+      );
+    },
+
+    async spr1()
+    {
+      const result1 = await this.initBackLog();
+      //const result2 = await this.initInProgress();
+      //const result3 = await this.initInTesting();
+      //const result4 = await this.initDone();
+
+      //console.log("result="+result); 
+      this.arrBackLog = [];
+      //this.arrInProgress = [];
+      //this.arrTested = [];
+      //this.arrDone = [];
+
+      Array.prototype.push.apply(this.arrBackLog, result1);
+      //Array.prototype.push.apply(this.arrInProgress, result2);
+      //Array.prototype.push.apply(this.arrTested, result3);
+      //Array.prototype.push.apply(this.arrDone, result4);
+      //Array.prototype.push(this.arrBackLog, result);
+      //console.log("arrBackLog: "+this.arrBackLog);
+    },
+
+    async spr2()
+    {
+      //const result1 = await this.initBackLog();
+      const result2 = await this.initInProgress();
+      //const result3 = await this.initInTesting();
+      //const result4 = await this.initDone();
+
+      //console.log("result="+result); 
+      //this.arrBackLog = [];
+      this.arrInProgress = [];
+      //this.arrTested = [];
+      //this.arrDone = [];
+
+      //Array.prototype.push.apply(this.arrBackLog, result1);
+      Array.prototype.push.apply(this.arrInProgress, result2);
+      //Array.prototype.push.apply(this.arrTested, result3);
+      //Array.prototype.push.apply(this.arrDone, result4);
+      //Array.prototype.push(this.arrBackLog, result);
+      //console.log("arrBackLog: "+this.arrBackLog);
+    },
+
+    async spr3()
+    {
+      //const result1 = await this.initBackLog();
+      //const result2 = await this.initInProgress();
+      const result3 = await this.initInTesting();
+      //const result4 = await this.initDone();
+
+      //console.log("result="+result); 
+      //this.arrBackLog = [];
+      //this.arrInProgress = [];
+      this.arrTested = [];
+      //this.arrDone = [];
+
+      //Array.prototype.push.apply(this.arrBackLog, result1);
+      //Array.prototype.push.apply(this.arrInProgress, result2);
+      Array.prototype.push.apply(this.arrTested, result3);
+      //Array.prototype.push.apply(this.arrDone, result4);
+      //Array.prototype.push(this.arrBackLog, result);
+      //console.log("arrBackLog: "+this.arrBackLog);
+    },
+
+    async spr4()
+    {
+      //const result1 = await this.initBackLog();
+      //const result2 = await this.initInProgress();
+      //const result3 = await this.initInTesting();
+      const result4 = await this.initDone();
+
+      //console.log("result="+result); 
+      //this.arrBackLog = [];
+      //this.arrInProgress = [];
+      //this.arrTested = [];
+      this.arrDone = [];
+
+      //Array.prototype.push.apply(this.arrBackLog, result1);
+      //Array.prototype.push.apply(this.arrInProgress, result2);
+      //Array.prototype.push.apply(this.arrTested, result3);
+      Array.prototype.push.apply(this.arrDone, result4);
+      //Array.prototype.push(this.arrBackLog, result);
+      //console.log("arrBackLog: "+this.arrBackLog);
+    },
+  
     onCompleteChange(complete) {
       Meteor.call('tasks.setIsChecked', this.task._id, complete)
     },
@@ -175,13 +311,11 @@ export default {
       Meteor.call('tasks.remove', this.task._id)
     },
     add: function(choice) {
-
       if (this.newTask) 
       {
         if (choice == 1)
         {
             this.arrBackLog.push({ name: this.newTask });
-            console.log(this.arrBackLog[0].name)
             Meteor.call('tasks.update', this.task.text, this.task._id, this.arrBackLog, this.arrInProgress, this.arrTested, this.arrDone);
             this.newTask = "";
         }
@@ -203,21 +337,35 @@ export default {
           Meteor.call('tasks.update', this.task.text, this.task._id, this.arrBackLog, this.arrInProgress, this.arrTested, this.arrDone);
           this.newTask = "";
         }
-        
+        //this.saveData();
       }
     },
     showDetails: function()
     {
+      //this.spr();
       if (this.value1 == false)
       {
+        this.spr1();
+        this.spr2();
+        this.spr3();
+        this.spr4();
+
+        this.saveData();
         this.value1 = true;
         console.log(this.value1);
       }
       else if (this.value1 == true)
       {
+        this.saveData();
+        Meteor.call('tasks.update', this.task.text, this.task._id, this.arrBackLog, this.arrInProgress, this.arrTested, this.arrDone);
         this.value1 = false;
         console.log(this.value1);
+        //this.arrBackLog = [];
       }
+    },
+    saveData: function()
+    {
+      Meteor.call('tasks.update', this.task.text, this.task._id, this.arrBackLog, this.arrInProgress, this.arrTested, this.arrDone);
     }
   }
 }
