@@ -168,6 +168,21 @@ export default {
     };
   },
   methods: {
+    init()
+    {    
+      Meteor.call('tasks.readArrBackLog', this.task.text, this.task._id, function (error, result)
+      {
+          if (error)
+          {
+            throw new Meteor.Error('Not authorized')
+          }
+          console.log("result: "+result)
+          Array.prototype.push(this.arrBackLog, Array.from(result));
+      } )
+
+        console.log("ini arrbacklog: "+this.arrBackLog)
+        //return tab;
+    },
     onCompleteChange(complete) {
       Meteor.call('tasks.setIsChecked', this.task._id, complete)
     },
@@ -175,13 +190,11 @@ export default {
       Meteor.call('tasks.remove', this.task._id)
     },
     add: function(choice) {
-
       if (this.newTask) 
       {
         if (choice == 1)
         {
             this.arrBackLog.push({ name: this.newTask });
-            console.log(this.arrBackLog[0].name)
             Meteor.call('tasks.update', this.task.text, this.task._id, this.arrBackLog, this.arrInProgress, this.arrTested, this.arrDone);
             this.newTask = "";
         }
@@ -203,21 +216,32 @@ export default {
           Meteor.call('tasks.update', this.task.text, this.task._id, this.arrBackLog, this.arrInProgress, this.arrTested, this.arrDone);
           this.newTask = "";
         }
-        
+        //this.saveData();
       }
     },
     showDetails: function()
     {
+      this.init();
+      console.log("arrBackLog: "+this.arrBackLog)
+      
       if (this.value1 == false)
       {
+        //this.init();
+        this.saveData();
         this.value1 = true;
         console.log(this.value1);
       }
       else if (this.value1 == true)
       {
+        this.saveData();
+        Meteor.call('tasks.update', this.task.text, this.task._id, this.arrBackLog, this.arrInProgress, this.arrTested, this.arrDone);
         this.value1 = false;
         console.log(this.value1);
       }
+    },
+    saveData: function()
+    {
+      Meteor.call('tasks.update', this.task.text, this.task._id, this.arrBackLog, this.arrInProgress, this.arrTested, this.arrDone);
     }
   }
 }
