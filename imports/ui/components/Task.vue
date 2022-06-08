@@ -169,20 +169,27 @@ export default {
   },
   methods: {
     init()
-    {    
-      Meteor.call('tasks.readArrBackLog', this.task.text, this.task._id, function (error, result)
-      {
-          if (error)
+    {
+         return new Promise((resolve, reject)=>
           {
-            throw new Meteor.Error('Not authorized')
+            Meteor.call('tasks.readArrBackLog', this.task.text, this.task._id, function (error, result)
+            {
+              if (error) reject(error);
+              resolve(result);
+            } );
           }
-          console.log("result: "+result)
-          Array.prototype.push(this.arrBackLog, Array.from(result));
-      } )
-
-        console.log("ini arrbacklog: "+this.arrBackLog)
-        //return tab;
+      );
     },
+
+    async spr()
+    {
+      const result = await this.init();   
+      console.log("result="+result);   
+      Array.prototype.push.apply(this.arrBackLog, result);
+      //Array.prototype.push(this.arrBackLog, result);
+      console.log("arrBackLog: "+this.arrBackLog);
+    },
+  
     onCompleteChange(complete) {
       Meteor.call('tasks.setIsChecked', this.task._id, complete)
     },
@@ -221,12 +228,10 @@ export default {
     },
     showDetails: function()
     {
-      this.init();
-      console.log("arrBackLog: "+this.arrBackLog)
-      
       if (this.value1 == false)
       {
-        //this.init();
+        this.spr();
+
         this.saveData();
         this.value1 = true;
         console.log(this.value1);
