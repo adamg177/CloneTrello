@@ -168,7 +168,7 @@ export default {
     };
   },
   methods: {
-    init()
+    initBackLog()
     {
          return new Promise((resolve, reject)=>
           {
@@ -181,14 +181,127 @@ export default {
       );
     },
 
-    async spr()
+    initInProgress()
     {
-      const result = await this.init();   
-      console.log("result="+result); 
-      this.arrBackLog = [];  
-      Array.prototype.push.apply(this.arrBackLog, result);
+         return new Promise((resolve, reject)=>
+          {
+            Meteor.call('tasks.readArrInProgress', this.task.text, this.task._id, function (error, result)
+            {
+              if (error) reject(error);
+              resolve(result);
+            } );
+          }
+      );
+    },
+
+    initInTesting()
+    {
+         return new Promise((resolve, reject)=>
+          {
+            Meteor.call('tasks.readArrTesting', this.task.text, this.task._id, function (error, result)
+            {
+              if (error) reject(error);
+              resolve(result);
+            } );
+          }
+      );
+    },
+
+    initDone()
+    {
+         return new Promise((resolve, reject)=>
+          {
+            Meteor.call('tasks.readArrDone', this.task.text, this.task._id, function (error, result)
+            {
+              if (error) reject(error);
+              resolve(result);
+            } );
+          }
+      );
+    },
+
+    async spr1()
+    {
+      const result1 = await this.initBackLog();
+      //const result2 = await this.initInProgress();
+      //const result3 = await this.initInTesting();
+      //const result4 = await this.initDone();
+
+      //console.log("result="+result); 
+      this.arrBackLog = [];
+      //this.arrInProgress = [];
+      //this.arrTested = [];
+      //this.arrDone = [];
+
+      Array.prototype.push.apply(this.arrBackLog, result1);
+      //Array.prototype.push.apply(this.arrInProgress, result2);
+      //Array.prototype.push.apply(this.arrTested, result3);
+      //Array.prototype.push.apply(this.arrDone, result4);
       //Array.prototype.push(this.arrBackLog, result);
-      console.log("arrBackLog: "+this.arrBackLog);
+      //console.log("arrBackLog: "+this.arrBackLog);
+    },
+
+    async spr2()
+    {
+      //const result1 = await this.initBackLog();
+      const result2 = await this.initInProgress();
+      //const result3 = await this.initInTesting();
+      //const result4 = await this.initDone();
+
+      //console.log("result="+result); 
+      //this.arrBackLog = [];
+      this.arrInProgress = [];
+      //this.arrTested = [];
+      //this.arrDone = [];
+
+      //Array.prototype.push.apply(this.arrBackLog, result1);
+      Array.prototype.push.apply(this.arrInProgress, result2);
+      //Array.prototype.push.apply(this.arrTested, result3);
+      //Array.prototype.push.apply(this.arrDone, result4);
+      //Array.prototype.push(this.arrBackLog, result);
+      //console.log("arrBackLog: "+this.arrBackLog);
+    },
+
+    async spr3()
+    {
+      //const result1 = await this.initBackLog();
+      //const result2 = await this.initInProgress();
+      const result3 = await this.initInTesting();
+      //const result4 = await this.initDone();
+
+      //console.log("result="+result); 
+      //this.arrBackLog = [];
+      //this.arrInProgress = [];
+      this.arrTested = [];
+      //this.arrDone = [];
+
+      //Array.prototype.push.apply(this.arrBackLog, result1);
+      //Array.prototype.push.apply(this.arrInProgress, result2);
+      Array.prototype.push.apply(this.arrTested, result3);
+      //Array.prototype.push.apply(this.arrDone, result4);
+      //Array.prototype.push(this.arrBackLog, result);
+      //console.log("arrBackLog: "+this.arrBackLog);
+    },
+
+    async spr4()
+    {
+      //const result1 = await this.initBackLog();
+      //const result2 = await this.initInProgress();
+      //const result3 = await this.initInTesting();
+      const result4 = await this.initDone();
+
+      //console.log("result="+result); 
+      //this.arrBackLog = [];
+      //this.arrInProgress = [];
+      //this.arrTested = [];
+      this.arrDone = [];
+
+      //Array.prototype.push.apply(this.arrBackLog, result1);
+      //Array.prototype.push.apply(this.arrInProgress, result2);
+      //Array.prototype.push.apply(this.arrTested, result3);
+      Array.prototype.push.apply(this.arrDone, result4);
+      //Array.prototype.push(this.arrBackLog, result);
+      //console.log("arrBackLog: "+this.arrBackLog);
     },
   
     onCompleteChange(complete) {
@@ -232,7 +345,10 @@ export default {
       //this.spr();
       if (this.value1 == false)
       {
-        this.spr();
+        this.spr1();
+        this.spr2();
+        this.spr3();
+        this.spr4();
 
         this.saveData();
         this.value1 = true;
