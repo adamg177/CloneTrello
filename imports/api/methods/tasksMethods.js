@@ -38,6 +38,18 @@ Meteor.methods({
     TasksCollection.remove(id)
   },
 
+  'element.remove2'(id,name) {
+    check(id,name, String)
+    //const task = TasksCollection.findOne({_id: id, userId})
+    //if (!task) {
+    //  throw new Meteor.Error('Access denied')
+    //}
+    //TasksCollection.remove(id)
+    query = {name:name , _id:id}
+    const Task = TasksCollection.find(query).fetch()
+    TasksCollection.remove(name)
+  },
+
   'tasks.setIsChecked'(id, complete) {
     check(id, String)
     check(complete, Boolean)

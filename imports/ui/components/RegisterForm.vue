@@ -131,7 +131,7 @@ export default {
         },
         error => {
           if (error) {
-            alert("Error", error.reason);
+            alert("User with the given name already exists", error.reason);
           } else {
             this.$router.push({ name: "personal" });
           }
