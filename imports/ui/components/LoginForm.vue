@@ -54,6 +54,7 @@ export default {
     }
   },
   methods: {
+    
     onLoginSubmit() {
       const {username, password} = this.user
       Meteor.loginWithPassword(username, password)
